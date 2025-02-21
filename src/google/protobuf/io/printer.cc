@@ -269,7 +269,11 @@ Printer::Printer(ZeroCopyOutputStream* output, Options options)
     // global, so that child processes can pick it up as well. The flag
     // --enable_codegen_trace setenv()'s this in protoc's startup code.
     static const bool kEnableCodegenTrace =
+#if defined(__PROSPERO__)
+        false;
+#else
         ::getenv(kProtocCodegenTrace.data()) != nullptr;
+#endif
     options_.enable_codegen_trace = kEnableCodegenTrace;
   }
 }
@@ -277,7 +281,6 @@ Printer::Printer(ZeroCopyOutputStream* output, Options options)
 Printer::Printer(ZeroCopyOutputStream* output, char variable_delimiter,
                  AnnotationCollector* annotation_collector)
     : Printer(output, Options{variable_delimiter, annotation_collector}) {}
-
 absl::string_view Printer::LookupVar(absl::string_view var) {
   auto result = LookupInFrameStack(var, absl::MakeSpan(var_lookups_));
   ABSL_CHECK(result.has_value()) << "could not find " << var;

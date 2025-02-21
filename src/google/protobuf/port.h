@@ -239,7 +239,7 @@ struct is_supported_message_type
 };
 
 // To prevent sharing cache lines between threads
-#ifdef __cpp_aligned_new
+#if defined(__cpp_aligned_new) && !defined(__PROSPERO__)
 enum { kCacheAlignment = 64 };
 #else
 enum { kCacheAlignment = alignof(max_align_t) };  // do the best we can

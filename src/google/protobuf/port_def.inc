@@ -829,6 +829,8 @@ static_assert(PROTOBUF_ABSL_MIN(20230125, 3),
 // effectively but which people turn on anyways.
 #ifdef __clang__
 #pragma clang diagnostic push
+//disabling warnings with newer compilers without breaking builds with older compilers.
+#pragma clang diagnostic ignored "-Wunknown-warning-option"
 // -Wshorten-64-to-32 is a typical pain where we diff pointers.
 //   char* p = strchr(s, '\n');
 //   return p ? p - s : -1;

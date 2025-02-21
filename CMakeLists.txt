@@ -151,7 +151,9 @@ else()
 endif()
 file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/cmaketest.map)
 
-find_package(Threads REQUIRED)
+if(NOT __COMPILER_PS5)
+  find_package(Threads REQUIRED)
+endif()
 
 # We can install dependencies from submodules if we're running
 # CMake v3.13 or newer.
@@ -280,6 +282,11 @@ else (MSVC)
   # the build tool.
   set(LIB_PREFIX)
 endif (MSVC)
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  # Clang warning suppressions
+  add_definitions(-Wall -Werror -Wno-deprecated-register -Wno-unused-function -Wno-error=register)
+endif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 
 include_directories(
   ${ZLIB_INCLUDE_DIRECTORIES}

@@ -390,9 +390,11 @@ DiskSourceTree::DiskFileToVirtualFile(absl::string_view disk_file,
   for (int i = 0; i < mapping_index; i++) {
     if (ApplyMapping(*virtual_file, mappings_[i].virtual_path,
                      mappings_[i].disk_path, shadowing_disk_file)) {
-      if (access(shadowing_disk_file->c_str(), F_OK) >= 0) {
-        // File exists.
-        return SHADOWED;
+        FILE* fp = fopen(shadowing_disk_file->c_str(), "r");
+        if (fp != nullptr) {
+            // File exists.
+            fclose(fp);
+            return SHADOWED;
       }
     }
   }
