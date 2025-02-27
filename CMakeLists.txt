@@ -151,7 +151,11 @@ else()
 endif()
 file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/cmaketest.map)
 
-if(NOT __COMPILER_PS5)
+if(_GXDK_XS_TOOLCHAIN_)
+  set(CMAKE_USE_WIN32_THREADS_INIT 1)
+  set(Threads_FOUND TRUE)
+  add_library(Threads::Threads INTERFACE IMPORTED)
+elseif(NOT __COMPILER_PS5)
   find_package(Threads REQUIRED)
 endif()
 
